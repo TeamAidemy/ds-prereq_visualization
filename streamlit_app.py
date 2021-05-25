@@ -8,6 +8,10 @@ import requests, io
 from SessionState import get
 
 def remove_unnecessary_edges(graph: Digraph, courses: pd.DataFrame, course_list: list, styles=None):
+    """
+    `graph`から余分なエッジを取り除く。余分なエッジとは、コースAからコースBへ最低１つの他コースを経由する予習必須の
+    パスが存在するときにある、コースAからコースBへのエッジのこと。
+    """
     for p in permutations(course_list, r=2):
         if has_edge(graph, p[0], p[1], styles):
             for prereq in courses[courses['course_number'] == p[1]].iloc[0]['course_prepare_must']:
@@ -126,15 +130,16 @@ def main():
     for target in target_courses:
         row = courses[courses['course_number'] == target].iloc[0]
         if node_str(str(target), row['course_title'], color=node_colors[row['course_level'] - 1], 
-                    href=aidemy+str(target), fontname="Noto Sans CJK JP") not in path.body:
+                    href=aidemy+str(target), fontname=fontname) not in path.body:
             course_list.append(target)
             path.node(str(target), row['course_title'], color=node_colors[row['course_level'] - 1], 
-                href=aidemy+str(target), fontname="Noto Sans CJK JP")
+                href=aidemy+str(target), fontname=fontname)
             add_prereq(path, courses, target, node_colors, aidemy, course_list)
 
     # 余分なエッジを取り除く
     remove_unnecessary_edges(path, courses, course_list, styles)
 
+    # グラフ内にある全てのコースのリストから受講必須とおすすめのコースを判別する
     required = set()
     encouraged = set()
     for course in course_list:
@@ -147,6 +152,7 @@ def main():
         if course not in required:
             encouraged.add(course)
 
+    # 受講必須とおすすめのコースをリストアップする
     st.subheader('受講必須のコース')
     if len(required) == 0:
         st.text('なし')
@@ -160,14 +166,15 @@ def main():
         row = courses[courses['course_number'] == e].iloc[0]
         st.markdown('[{}]({})'.format(row['course_title'], aidemy + str(e)))
 
+    # 受講順序を示すグラフを表示する
     st.subheader('おすすめの受講順序')
     st.graphviz_chart(path)
     st.markdown('$\\rightarrow$: 予習必須　$\dashrightarrow$: できればやろう')
 
 if __name__ == "__main__":
+    # パスワードで認証する
     session_state = get(password='')
     authorized = False
-
     if session_state.password != st.secrets['password']:
         with st.form("パスワードを入力してください"):
             session_state.password = st.text_input("パスワード", type='password')
@@ -176,7 +183,7 @@ if __name__ == "__main__":
                 if session_state.password == st.secrets['password']:
                     authorized = True
                 else:
-                    st.error("the password you entered is incorrect")
+                    st.error('パスワードが間違っています')
         if authorized:
             main()
     else:
