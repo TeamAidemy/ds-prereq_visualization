@@ -107,10 +107,12 @@ def main():
         candidate_ids.update(set(candidates['course_number']))
     options = []
     name_id_dict = {}
+    name_description_dict = {}
     for candidate in candidate_ids:
         row = courses[courses['course_number'] == candidate].iloc[0]
         options.append(row['course_title'])
         name_id_dict[row['course_title']] = candidate
+        name_description_dict[row['course_title']] = row['course_description']
     selected = st.multiselect('受講したいコースを選んでください', options)
     
     # 選択したコースを記録しつつ選択が終わるまで待機
@@ -121,7 +123,7 @@ def main():
         target_courses.add(name_id_dict[s])
     st.text('選択済みのコース')
     for c in target_course_names:
-        st.markdown('[{}]({})：{}'.format(c, aidemy + str(name_id_dict[c]), row['course_description']))
+        st.markdown('[{}]({})：{}'.format(c, aidemy + str(name_id_dict[c]), name_description_dict[c]))
     if not st.button('選択完了'):
         st.stop()
 
