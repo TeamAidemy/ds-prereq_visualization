@@ -121,7 +121,7 @@ def main():
         target_courses.add(name_id_dict[s])
     st.text('選択済みのコース')
     for c in target_course_names:
-        st.markdown('[{}]({})'.format(c, aidemy + str(name_id_dict[c])))
+        st.markdown('[{}]({})：{}'.format(c, aidemy + str(name_id_dict[c]), row['course_description']))
     if not st.button('選択完了'):
         st.stop()
 
@@ -158,13 +158,13 @@ def main():
         st.text('なし')
     for r in required:
         row = courses[courses['course_number'] == r].iloc[0]
-        st.markdown('[{}]({})：{}'.format(row['course_title'], aidemy + str(r), row['course_description']))
+        st.markdown('[{}]({})'.format(row['course_title'], aidemy + str(r)))
     st.subheader('受講おすすめのコース')
     if len(encouraged) == 0:
         st.text('なし')
     for e in encouraged:
         row = courses[courses['course_number'] == e].iloc[0]
-        st.markdown('[{}]({})：{}'.format(row['course_title'], aidemy + str(e), row['course_description']))
+        st.markdown('[{}]({})'.format(row['course_title'], aidemy + str(e)))
 
     # 受講順序を示すグラフを表示する
     st.subheader('おすすめの受講順序')
