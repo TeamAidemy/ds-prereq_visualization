@@ -158,13 +158,13 @@ def main():
         st.text('なし')
     for r in required:
         row = courses[courses['course_number'] == r].iloc[0]
-        st.markdown('[{}]({})'.format(row['course_title'], aidemy + str(r)))
+        st.markdown('[{}]({})：{}'.format(row['course_title'], aidemy + str(r), row['course_description']))
     st.subheader('受講おすすめのコース')
     if len(encouraged) == 0:
         st.text('なし')
     for e in encouraged:
         row = courses[courses['course_number'] == e].iloc[0]
-        st.markdown('[{}]({})'.format(row['course_title'], aidemy + str(e)))
+        st.markdown('[{}]({})：{}'.format(row['course_title'], aidemy + str(e), row['course_description']))
 
     # 受講順序を示すグラフを表示する
     st.subheader('おすすめの受講順序')
