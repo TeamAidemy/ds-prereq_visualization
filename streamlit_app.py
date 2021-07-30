@@ -34,7 +34,7 @@ def main():
     owner = 'TeamAidemy'
     repo = 'aidemy-contents'
     path = 'contents-automator/all.csv'
-    branch = 'abstract_csv/feature'
+    branch = 'master'
 
     # GitHubから最新のCSVをダウンロードしてDataFrameに変換する
     r = requests.get('https://api.github.com/repos/{owner}/{repo}/contents/{path}?ref={branch}'.format(
