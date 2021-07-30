@@ -29,7 +29,6 @@ def remove_unnecessary_edges(graph: Digraph, courses: pd.DataFrame, course_list:
 def main():
     st.title('あなたにぴったりなコースをお届け！')
 
-    # TODO 最新のCSVの場所に変える
     token = st.secrets['token'] # aidemy-contentsから読み取りができるトークン
     owner = 'TeamAidemy'
     repo = 'aidemy-contents'
