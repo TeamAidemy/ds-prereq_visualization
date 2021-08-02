@@ -1,1 +1,2 @@
-# prereq_visualization
+Streamlitの無償版を使うためにpublicリポジトリにしておく必要があるので、publicにしています
+（DSグループリーダー承認済、2021.08.02時点）
